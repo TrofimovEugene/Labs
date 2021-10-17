@@ -1,0 +1,52 @@
+CREATE TABLE [dbo].[Table]
+(
+    [Id] UNIQUEIDENTIFIER PRIMARY KEY default NEWID() NOT NULL, 
+    [PolisNumber] NVARCHAR(MAX) NOT NULL
+)
+
+CREATE TABLE [dbo].[Patient]
+(
+    [Id] UNIQUEIDENTIFIER PRIMARY KEY default NEWID() NOT NULL, 
+    [FirstName] NVARCHAR(MAX) NOT NULL, 
+    [SecondName] NVARCHAR(MAX) NOT NULL, 
+    [Patronymic] NVARCHAR(MAX) NOT NULL, 
+    [DateBirth] DATETIME NOT NULL, 
+    [IdPolis] UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT FK_Polis_To_Patient FOREIGN KEY (IdPolis)  REFERENCES Polis (Id) ON DELETE CASCADE
+)
+
+CREATE TABLE [dbo].[Result]
+(
+    [Id] UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL, 
+    [Result] BIT NOT NULL, 
+    [Accuracy] NVARCHAR(MAX) NOT NULL,
+)
+
+CREATE TABLE [dbo].[TypeTest]
+(
+    [Id] UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(MAX) NOT NULL,
+)
+
+CREATE TABLE [dbo].[Place]
+(
+	[Id] UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL PRIMARY KEY, 
+    [NamePlace] NVARCHAR(MAX) NOT NULL, 
+    [NumberPhone] BIGINT NULL, 
+    [Address] NVARCHAR(MAX) NOT NULL, 
+    [Email] NVARCHAR(MAX) NULL
+)
+
+CREATE TABLE [dbo].[Test]
+(
+    [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT (newid()), 
+    [DateTest] DATETIME NOT NULL,
+    [IdPatient] UNIQUEIDENTIFIER NOT NULL, 
+    [IdTypeTest] UNIQUEIDENTIFIER NOT NULL, 
+    [IdPlace] UNIQUEIDENTIFIER NOT NULL, 
+    [IdResult] UNIQUEIDENTIFIER NOT NULL, 
+    CONSTRAINT [FK_Patient_to_Test] FOREIGN KEY ([IdPatient]) REFERENCES [dbo].[Patient] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Type_to_Test] FOREIGN KEY ([IdTypeTest]) REFERENCES [dbo].[TypeTest] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Place_to_Test] FOREIGN KEY ([IdPlace]) REFERENCES [dbo].[Place] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Result_to_Test] FOREIGN KEY ([IdResult]) REFERENCES [dbo].[Result] ([Id]) ON DELETE CASCADE
+)
