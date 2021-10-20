@@ -1,8 +1,8 @@
-CREATE TABLE [dbo].[Table]
+CREATE TABLE [dbo].[Polis]
 (
     [Id] UNIQUEIDENTIFIER PRIMARY KEY default NEWID() NOT NULL, 
     [PolisNumber] NVARCHAR(MAX) NOT NULL
-)
+);
 
 CREATE TABLE [dbo].[Patient]
 (
@@ -13,20 +13,23 @@ CREATE TABLE [dbo].[Patient]
     [DateBirth] DATETIME NOT NULL, 
     [IdPolis] UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT FK_Polis_To_Patient FOREIGN KEY (IdPolis)  REFERENCES Polis (Id) ON DELETE CASCADE
-)
+);
 
 CREATE TABLE [dbo].[Result]
 (
     [Id] UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL, 
     [Result] BIT NOT NULL, 
     [Accuracy] NVARCHAR(MAX) NOT NULL,
-)
+);
 
 CREATE TABLE [dbo].[TypeTest]
 (
     [Id] UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL PRIMARY KEY, 
     [Name] NVARCHAR(MAX) NOT NULL,
-)
+);
+
+INSERT INTO TypeTest (Id, Name) VALUE ('c1711fc1-52c1-46ac-870b-6d9305d5ac49', 'IgM'); 
+INSERT INTO TypeTest (Id, Name) VALUE ('f4952573-e619-4a63-b9be-8a8a2e90a8b3', 'IgG'); 
 
 CREATE TABLE [dbo].[Place]
 (
@@ -35,7 +38,7 @@ CREATE TABLE [dbo].[Place]
     [NumberPhone] BIGINT NULL, 
     [Address] NVARCHAR(MAX) NOT NULL, 
     [Email] NVARCHAR(MAX) NULL
-)
+);
 
 CREATE TABLE [dbo].[Test]
 (
@@ -49,4 +52,4 @@ CREATE TABLE [dbo].[Test]
     CONSTRAINT [FK_Type_to_Test] FOREIGN KEY ([IdTypeTest]) REFERENCES [dbo].[TypeTest] ([Id]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Place_to_Test] FOREIGN KEY ([IdPlace]) REFERENCES [dbo].[Place] ([Id]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Result_to_Test] FOREIGN KEY ([IdResult]) REFERENCES [dbo].[Result] ([Id]) ON DELETE CASCADE
-)
+);
